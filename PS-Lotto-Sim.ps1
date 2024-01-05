@@ -93,7 +93,6 @@ function Update-WinningNumbersAndAmount {
 		$powerBallMatch = $Win_Array[5] -eq $drawsArray[$i][5]
 		$RTB.SelectionColor = "Black"
 		
-        #$RTB.AppendText("Draw " + ($i + 1) + ": ")
         $RTB.AppendText("Draw {0:D2}: " -f ($i + 1))
 
 		Format-MatchingNumbers -winningNumbers $Win_Array -drawNumbers $drawsArray[$i]
@@ -161,7 +160,6 @@ function Update-WinningNumbersAndAmount {
 		$RTB.AppendText("`r`n")
 	}
     $RTB.AppendText("`r`n")
-	#$RTB.AppendText("Spent = $" + $count + "      Won = $" + $winnings)
     $RTB.AppendText("Spent = $" + $count.ToString("N0") + "      Won = $" + $winnings.ToString("N0"))
     $RTB.AppendText("`r`n")
     $ROI = (($winnings - $count) / $count) * 100
