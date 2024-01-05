@@ -202,11 +202,11 @@ function Show-MainForm {
 	$PlayUntilJackpotButton.text = "Play Until Jackpot or Million"
 	$PlayUntilJackpotButton.Add_Click({ PlayUntilJackpotOrMillion })
 
-    $PlayCountLabel = New-Object System.Windows.Forms.Label
-    $PlayCountLabel.Font = New-Object System.Drawing.Font("Microsoft Sans Serif",15,[System.Drawing.FontStyle]::Bold)
-    $PlayCountLabel.Location = New-Object System.Drawing.Size(450,1050)
-    $PlayCountLabel.Size = New-Object System.Drawing.Size(300,80)
-    $PlayCountLabel.Text = "Total Plays: 0"
+    	$PlayCountLabel = New-Object System.Windows.Forms.Label
+	$PlayCountLabel.Font = New-Object System.Drawing.Font("Microsoft Sans Serif",15,[System.Drawing.FontStyle]::Bold)
+    	$PlayCountLabel.Location = New-Object System.Drawing.Size(450,1050)
+    	$PlayCountLabel.Size = New-Object System.Drawing.Size(300,80)
+    	$PlayCountLabel.Text = "Total Plays: 0"
 
 	$ElapsedTimeLabel = New-Object System.Windows.Forms.Label
 	$ElapsedTimeLabel.Font = New-Object System.Drawing.Font ("Microsoft Sans Serif",15,[System.Drawing.FontStyle]::Bold)
