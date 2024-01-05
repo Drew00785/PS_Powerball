@@ -1,574 +1,268 @@
-﻿$winnings = 0
+Add-Type -AssemblyName System.Windows.Forms
+Add-Type -AssemblyName System.Drawing
+
+$winnings = 0
 $script:count = 20
+$script:totalPlays = 0
+$script:stopSimulation = $false
 
-Function Main {
-    (Show-MainForm)
+function Main {
+	Show-MainForm
 }
 
-Function AddCounter {
-$script:count +=20
+function AddCounter {
+	$script:count += 20
 }
 
-Function GetNumbers {
-    $Win_Array=@(Get-Random -Count 5 -InputObject(1..69) | % tostring "00" | Sort-Object) + (Get-Random -Minimum 1 -Maximum 26 | % tostring "00")
-    $Draw1_Array=@(Get-Random -Count 5 -InputObject(1..69) | % tostring "00" |Sort-Object) + (Get-Random -Minimum 1 -Maximum 26 | % tostring "00")
-    $Draw2_Array=@(Get-Random -Count 5 -InputObject(1..69) | % tostring "00" |Sort-Object) + (Get-Random -Minimum 1 -Maximum 26 | % tostring "00")
-    $Draw3_Array=@(Get-Random -Count 5 -InputObject(1..69) | % tostring "00" |Sort-Object) + (Get-Random -Minimum 1 -Maximum 26 | % tostring "00")
-    $Draw4_Array=@(Get-Random -Count 5 -InputObject(1..69) | % tostring "00" |Sort-Object) + (Get-Random -Minimum 1 -Maximum 26 | % tostring "00")
-    $Draw5_Array=@(Get-Random -Count 5 -InputObject(1..69) | % tostring "00" |Sort-Object) + (Get-Random -Minimum 1 -Maximum 26 | % tostring "00")
-    $Draw6_Array=@(Get-Random -Count 5 -InputObject(1..69) | % tostring "00" |Sort-Object) + (Get-Random -Minimum 1 -Maximum 26 | % tostring "00")
-    $Draw7_Array=@(Get-Random -Count 5 -InputObject(1..69) | % tostring "00" |Sort-Object) + (Get-Random -Minimum 1 -Maximum 26 | % tostring "00")
-    $Draw8_Array=@(Get-Random -Count 5 -InputObject(1..69) | % tostring "00" |Sort-Object) + (Get-Random -Minimum 1 -Maximum 26 | % tostring "00")
-    $Draw9_Array=@(Get-Random -Count 5 -InputObject(1..69) | % tostring "00" |Sort-Object) + (Get-Random -Minimum 1 -Maximum 26 | % tostring "00")
-    $Draw10_Array=@(Get-Random -Count 5 -InputObject(1..69) | % tostring "00" |Sort-Object) + (Get-Random -Minimum 1 -Maximum 26 | % tostring "00")
-
-    $Match1 = Compare-Object -ReferenceObject $Win_Array[0..4] -DifferenceObject $Draw1_Array[0..4] -IncludeEqual -ExcludeDifferent -PassThru 
-    $PB_Match1 = Compare-Object -ReferenceObject $Win_Array[-1] -DifferenceObject $Draw1_Array[-1] -IncludeEqual -ExcludeDifferent -PassThru
-
-    $Match2 = Compare-Object -ReferenceObject $Win_Array[0..4] -DifferenceObject $Draw2_Array[0..4] -IncludeEqual -ExcludeDifferent -PassThru 
-    $PB_Match2 = Compare-Object -ReferenceObject $Win_Array[-1] -DifferenceObject $Draw2_Array[-1] -IncludeEqual -ExcludeDifferent -PassThru
-
-    $Match3 = Compare-Object -ReferenceObject $Win_Array[0..4] -DifferenceObject $Draw3_Array[0..4] -IncludeEqual -ExcludeDifferent -PassThru 
-    $PB_Match3 = Compare-Object -ReferenceObject $Win_Array[-1] -DifferenceObject $Draw3_Array[-1] -IncludeEqual -ExcludeDifferent -PassThru
-
-    $Match4 = Compare-Object -ReferenceObject $Win_Array[0..4] -DifferenceObject $Draw4_Array[0..4] -IncludeEqual -ExcludeDifferent -PassThru 
-    $PB_Match4 = Compare-Object -ReferenceObject $Win_Array[-1] -DifferenceObject $Draw4_Array[-1] -IncludeEqual -ExcludeDifferent -PassThru
-
-    $Match5 = Compare-Object -ReferenceObject $Win_Array[0..4] -DifferenceObject $Draw5_Array[0..4] -IncludeEqual -ExcludeDifferent -PassThru 
-    $PB_Match5 = Compare-Object -ReferenceObject $Win_Array[-1] -DifferenceObject $Draw5_Array[-1] -IncludeEqual -ExcludeDifferent -PassThru
-
-    $Match6 = Compare-Object -ReferenceObject $Win_Array[0..4] -DifferenceObject $Draw6_Array[0..4] -IncludeEqual -ExcludeDifferent -PassThru 
-    $PB_Match6 = Compare-Object -ReferenceObject $Win_Array[-1] -DifferenceObject $Draw6_Array[-1] -IncludeEqual -ExcludeDifferent -PassThru
-
-    $Match7 = Compare-Object -ReferenceObject $Win_Array[0..4] -DifferenceObject $Draw7_Array[0..4] -IncludeEqual -ExcludeDifferent -PassThru 
-    $PB_Match7 = Compare-Object -ReferenceObject $Win_Array[-1] -DifferenceObject $Draw7_Array[-1] -IncludeEqual -ExcludeDifferent -PassThru
-
-    $Match8 = Compare-Object -ReferenceObject $Win_Array[0..4] -DifferenceObject $Draw8_Array[0..4] -IncludeEqual -ExcludeDifferent -PassThru 
-    $PB_Match8 = Compare-Object -ReferenceObject $Win_Array[-1] -DifferenceObject $Draw8_Array[-1] -IncludeEqual -ExcludeDifferent -PassThru
-
-    $Match9 = Compare-Object -ReferenceObject $Win_Array[0..4] -DifferenceObject $Draw9_Array[0..4] -IncludeEqual -ExcludeDifferent -PassThru 
-    $PB_Match9 = Compare-Object -ReferenceObject $Win_Array[-1] -DifferenceObject $Draw9_Array[-1] -IncludeEqual -ExcludeDifferent -PassThru
-
-    $Match10 = Compare-Object -ReferenceObject $Win_Array[0..4] -DifferenceObject $Draw10_Array[0..4] -IncludeEqual -ExcludeDifferent -PassThru 
-    $PB_Match10 = Compare-Object -ReferenceObject $Win_Array[-1] -DifferenceObject $Draw10_Array[-1] -IncludeEqual -ExcludeDifferent -PassThru
-
-    $RTB.SelectAll()
-    $RTB.SelectedText = ""
-    $RTB.AppendText("Winning Numbers: " + $Win_Array)
-    $RTB.AppendText("`r`n")
-    $RTB.AppendText("`r`n")
-
-    #DRAW 1
-    $RTB.AppendText("              1st Draw: ") 
-    $Draw1_Array[0..4] | ForEach-Object {
-    if ($Win_Array[0..4] -contains $_) {
-        $RTB.SelectionColor = "Green"
-        $oldFont = $RTB.Selectionfont
-        $RTB.SelectionFont = New-Object System.Drawing.Font('Microsoft Sans Serif',20,[System.Drawing.FontStyle]([System.Drawing.FontStyle]::Bold -bor [System.Drawing.FontStyle]::Underline))
-        $RTB.AppendText($_)
-        $RTB.SelectionFont = New-Object System.Drawing.Font($oldFont, [System.Drawing.Fontstyle]::Bold)
-        $RTB.AppendText(" ")
-    } else {
-        $RTB.SelectionColor = "Black"
-        $RTB.AppendText($_)
-        $RTB.AppendText(" ")
-        }
-    }
-    
-    $Draw1_Array[-1] | ForEach-Object {
-    if ($Win_Array[-1] -contains $_) {
-        $RTB.SelectionColor = "Green"
-        $oldFont = $RTB.Selectionfont
-        $RTB.SelectionFont = New-Object System.Drawing.Font('Microsoft Sans Serif',20,[System.Drawing.FontStyle]([System.Drawing.FontStyle]::Bold -bor [System.Drawing.FontStyle]::Underline))
-        $RTB.AppendText($_)
-        $RTB.SelectionFont = New-Object System.Drawing.Font($oldFont, [System.Drawing.Fontstyle]::Bold)
-        $RTB.AppendText(" ")
-    } else {
-        $RTB.SelectionColor = "Black"
-        $RTB.AppendText($_)
-        $RTB.AppendText(" ")
-        }
-    }
-
-    #DRAW 1 Matches
-    If ($Match1.Count -eq 0 -and $PB_Match1.Count -eq 0) {$RTB.SelectionColor = "Red"; $RTB.AppendText("LOSER - No Matches")}
-    Elseif ($Match1.Count -eq 0 -and $PB_Match1.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$4 " + "WINNER - Powerball Matched") + ($script:winnings+=4)}
-    Elseif ($Match1.Count -eq 1 -and $PB_Match1.Count -eq 0) {$RTB.SelectionColor = "Red"; $RTB.AppendText("LOSER - 1 White Ball Matched")}
-    Elseif ($Match1.Count -eq 1 -and $PB_Match1.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$4 " + "WINNER - 1 White Ball + PB") + ($script:winnings+=4)}
-    Elseif ($Match1.Count -eq 2 -and $PB_Match1.Count -eq 0) {$RTB.SelectionColor = "Red"; $RTB.AppendText("LOSER - 2 White Balls")}
-    Elseif ($Match1.Count -eq 2 -and $PB_Match1.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$7 " + "WINNER - 2 White Balls + PB") + ($script:winnings+=7)}
-    Elseif ($Match1.Count -eq 3 -and $PB_Match1.Count -eq 0) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$7 " + "WINNER - 3 White Balls") + ($script:winnings+=7)}
-    Elseif ($Match1.Count -eq 3 -and $PB_Match1.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$100 " + "WINNER - 3 White Balls + PB") + ($script:winnings+=100)}
-    Elseif ($Match1.Count -eq 4 -and $PB_Match1.Count -eq 0) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$100 " + "WINNER - 4 White Balls") + ($script:winnings+=100)}
-    Elseif ($Match1.Count -eq 4 -and $PB_Match1.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$50,000 " + "WINNER - 4 White Balls + PB") + ($script:winnings+=50000)}
-    Elseif ($Match1.Count -eq 5 -and $PB_Match1.Count -eq 0) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$1,000,000 " + "WINNER - 5 White Balls") + ($script:winnings+=1000000)}
-    Elseif ($Match1.Count -eq 5 -and $PB_Match1.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("JACKPOT WINNER") + ($script:winnings+=5000000)}
-
-    #DRAW 2
-    $RTB.AppendText("`r`n")
-    $RTB.AppendText("             2nd Draw: ")
-    $Draw2_Array[0..4] | ForEach-Object {
-    if ($Win_Array[0..4] -contains $_) {
-        $RTB.SelectionColor = "Green"
-        $oldFont = $RTB.Selectionfont
-        $RTB.SelectionFont = New-Object System.Drawing.Font('Microsoft Sans Serif',20,[System.Drawing.FontStyle]([System.Drawing.FontStyle]::Bold -bor [System.Drawing.FontStyle]::Underline))
-        $RTB.AppendText($_)
-        $RTB.SelectionFont = New-Object System.Drawing.Font($oldFont, [System.Drawing.Fontstyle]::Bold)
-        $RTB.AppendText(" ")
-    } else {
-        $RTB.SelectionColor = "Black"
-        $RTB.AppendText($_)
-        $RTB.AppendText(" ")
-        }
-    }
-
-    $Draw2_Array[-1] | ForEach-Object {
-    if ($Win_Array[-1] -contains $_) {
-        $RTB.SelectionColor = "Green"
-        $oldFont = $RTB.Selectionfont
-        $RTB.SelectionFont = New-Object System.Drawing.Font('Microsoft Sans Serif',20,[System.Drawing.FontStyle]([System.Drawing.FontStyle]::Bold -bor [System.Drawing.FontStyle]::Underline))
-        $RTB.AppendText($_)
-        $RTB.SelectionFont = New-Object System.Drawing.Font($oldFont, [System.Drawing.Fontstyle]::Bold)
-        $RTB.AppendText(" ")
-    } else {
-        $RTB.SelectionColor = "Black"
-        $RTB.AppendText($_)
-        $RTB.AppendText(" ")
-        }
-    }
-
-    #DRAW 2 Matches
-    If ($Match2.Count -eq 0 -and $PB_Match2.Count -eq 0) {$RTB.SelectionColor = "Red"; $RTB.AppendText("LOSER - No Matches")}
-    Elseif ($Match2.Count -eq 0 -and $PB_Match2.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$4 " + "WINNER - Powerball Matched") + ($script:winnings+=4)}
-    Elseif ($Match2.Count -eq 1 -and $PB_Match2.Count -eq 0) {$RTB.SelectionColor = "Red"; $RTB.AppendText("LOSER - 1 White Ball Matched")}
-    Elseif ($Match2.Count -eq 1 -and $PB_Match2.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$4 " + "WINNER - 1 White Ball + PB") + ($script:winnings+=4)}
-    Elseif ($Match2.Count -eq 2 -and $PB_Match2.Count -eq 0) {$RTB.SelectionColor = "Red"; $RTB.AppendText("LOSER - 2 White Balls")}
-    Elseif ($Match2.Count -eq 2 -and $PB_Match2.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$7 " + "WINNER - 2 White Balls + PB") + ($script:winnings+=7)}
-    Elseif ($Match2.Count -eq 3 -and $PB_Match2.Count -eq 0) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$7 " + "WINNER - 3 White Balls") + ($script:winnings+=7)}
-    Elseif ($Match2.Count -eq 3 -and $PB_Match2.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$100 " + "WINNER - 3 White Balls + PB") + ($script:winnings+=100)}
-    Elseif ($Match2.Count -eq 4 -and $PB_Match2.Count -eq 0) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$100 " + "WINNER - 4 White Balls") + ($script:winnings+=100)}
-    Elseif ($Match2.Count -eq 4 -and $PB_Match2.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$50,000 " + "WINNER - 4 White Balls + PB") + ($script:winnings+=50000)}
-    Elseif ($Match2.Count -eq 5 -and $PB_Match2.Count -eq 0) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$1,000,000 " + "WINNER - 5 White Balls") + ($script:winnings+=1000000)}
-    Elseif ($Match2.Count -eq 5 -and $PB_Match2.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("JACKPOT WINNER")+ ($script:winnings+=5000000)}
-
-    #DRAW 3
-    $RTB.AppendText("`r`n")
-    $RTB.AppendText("              3rd Draw: ")
-    $Draw3_Array[0..4] | ForEach-Object {
-    if ($Win_Array[0..4] -contains $_) {
-        $RTB.SelectionColor = "Green"
-        $oldFont = $RTB.Selectionfont
-        $RTB.SelectionFont = New-Object System.Drawing.Font('Microsoft Sans Serif',20,[System.Drawing.FontStyle]([System.Drawing.FontStyle]::Bold -bor [System.Drawing.FontStyle]::Underline))
-        $RTB.AppendText($_)
-        $RTB.SelectionFont = New-Object System.Drawing.Font($oldFont, [System.Drawing.Fontstyle]::Bold)
-        $RTB.AppendText(" ")
-    } else {
-        $RTB.SelectionColor = "Black"
-        $RTB.AppendText($_)
-        $RTB.AppendText(" ")
-        }
-    }
-
-    $Draw3_Array[-1] | ForEach-Object {
-    if ($Win_Array[-1] -contains $_) {
-        $RTB.SelectionColor = "Green"
-        $oldFont = $RTB.Selectionfont
-        $RTB.SelectionFont = New-Object System.Drawing.Font('Microsoft Sans Serif',20,[System.Drawing.FontStyle]([System.Drawing.FontStyle]::Bold -bor [System.Drawing.FontStyle]::Underline))
-        $RTB.AppendText($_)
-        $RTB.SelectionFont = New-Object System.Drawing.Font($oldFont, [System.Drawing.Fontstyle]::Bold)
-        $RTB.AppendText(" ")
-    } else {
-        $RTB.SelectionColor = "Black"
-        $RTB.AppendText($_)
-        $RTB.AppendText(" ")
-        }
-    }
-
-    #DRAW 3 Matches
-    If ($Match3.Count -eq 0 -and $PB_Match3.Count -eq 0) {$RTB.SelectionColor = "Red"; $RTB.AppendText("LOSER - No Matches")}
-    Elseif ($Match3.Count -eq 0 -and $PB_Match3.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$4 " + "WINNER - Powerball Matched") + ($script:winnings+=4)}
-    Elseif ($Match3.Count -eq 1 -and $PB_Match3.Count -eq 0) {$RTB.SelectionColor = "Red"; $RTB.AppendText("LOSER - 1 White Ball Matched")}
-    Elseif ($Match3.Count -eq 1 -and $PB_Match3.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$4 " + "WINNER - 1 White Ball + PB") + ($script:winnings+=4)}
-    Elseif ($Match3.Count -eq 2 -and $PB_Match3.Count -eq 0) {$RTB.SelectionColor = "Red"; $RTB.AppendText("LOSER - 2 White Balls")}
-    Elseif ($Match3.Count -eq 2 -and $PB_Match3.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$7 " + "WINNER - 2 White Balls + PB") + ($script:winnings+=7)}
-    Elseif ($Match3.Count -eq 3 -and $PB_Match3.Count -eq 0) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$7 " + "WINNER - 3 White Balls") + ($script:winnings+=7)}
-    Elseif ($Match3.Count -eq 3 -and $PB_Match3.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$100 " + "WINNER - 3 White Balls + PB") + ($script:winnings+=100)}
-    Elseif ($Match3.Count -eq 4 -and $PB_Match3.Count -eq 0) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$100 " + "WINNER - 4 White Balls") + ($script:winnings+=100)}
-    Elseif ($Match3.Count -eq 4 -and $PB_Match3.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$50,000 " + "WINNER - 4 White Balls + PB") + ($script:winnings+=50000)}
-    Elseif ($Match3.Count -eq 5 -and $PB_Match3.Count -eq 0) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$1,000,000 " + "WINNER - 5 White Balls") + ($script:winnings+=1000000)}
-    Elseif ($Match3.Count -eq 5 -and $PB_Match3.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("JACKPOT WINNER") + ($script:winnings+=5000000)}
-
-    #DRAW 4
-    $RTB.AppendText("`r`n")
-    $RTB.AppendText("              4th Draw: ")
-    $Draw4_Array[0..4] | ForEach-Object {
-    if ($Win_Array[0..4] -contains $_) {
-        $RTB.SelectionColor = "Green"
-        $oldFont = $RTB.Selectionfont
-        $RTB.SelectionFont = New-Object System.Drawing.Font('Microsoft Sans Serif',20,[System.Drawing.FontStyle]([System.Drawing.FontStyle]::Bold -bor [System.Drawing.FontStyle]::Underline))
-        $RTB.AppendText($_)
-        $RTB.SelectionFont = New-Object System.Drawing.Font($oldFont, [System.Drawing.Fontstyle]::Bold)
-        $RTB.AppendText(" ")
-    } else {
-        $RTB.SelectionColor = "Black"
-        $RTB.AppendText($_)
-        $RTB.AppendText(" ")
-        }
-    }
-
-    $Draw4_Array[-1] | ForEach-Object {
-    if ($Win_Array[-1] -contains $_) {
-        $RTB.SelectionColor = "Green"
-        $oldFont = $RTB.Selectionfont
-        $RTB.SelectionFont = New-Object System.Drawing.Font('Microsoft Sans Serif',20,[System.Drawing.FontStyle]([System.Drawing.FontStyle]::Bold -bor [System.Drawing.FontStyle]::Underline))
-        $RTB.AppendText($_)
-        $RTB.SelectionFont = New-Object System.Drawing.Font($oldFont, [System.Drawing.Fontstyle]::Bold)
-        $RTB.AppendText(" ")
-    } else {
-        $RTB.SelectionColor = "Black"
-        $RTB.AppendText($_)
-        $RTB.AppendText(" ")
-        }
-    }
-
-    #DRAW 4 Matches
-    If ($Match4.Count -eq 0 -and $PB_Match4.Count -eq 0) {$RTB.SelectionColor = "Red"; $RTB.AppendText("LOSER - No Matches")}
-    Elseif ($Match4.Count -eq 0 -and $PB_Match4.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$4 " + "WINNER - Powerball Matched") + ($script:winnings+=4)}
-    Elseif ($Match4.Count -eq 1 -and $PB_Match4.Count -eq 0) {$RTB.SelectionColor = "Red"; $RTB.AppendText("LOSER - 1 White Ball Matched")}
-    Elseif ($Match4.Count -eq 1 -and $PB_Match4.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$4 " + "WINNER - 1 White Ball + PB") + ($script:winnings+=4)}
-    Elseif ($Match4.Count -eq 2 -and $PB_Match4.Count -eq 0) {$RTB.SelectionColor = "Red"; $RTB.AppendText("LOSER - 2 White Balls")}
-    Elseif ($Match4.Count -eq 2 -and $PB_Match4.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$7 " + "WINNER - 2 White Balls + PB") + ($script:winnings+=7)}
-    Elseif ($Match4.Count -eq 3 -and $PB_Match4.Count -eq 0) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$7 " + "WINNER - 3 White Balls") + ($script:winnings+=7)}
-    Elseif ($Match4.Count -eq 3 -and $PB_Match4.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$100 " + "WINNER - 3 White Balls + PB") + ($script:winnings+=100)}
-    Elseif ($Match4.Count -eq 4 -and $PB_Match4.Count -eq 0) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$100 " + "WINNER - 4 White Balls") + ($script:winnings+=100)}
-    Elseif ($Match4.Count -eq 4 -and $PB_Match4.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$50,000 " + "WINNER - 4 White Balls + PB") + ($script:winnings+=50000)}
-    Elseif ($Match4.Count -eq 5 -and $PB_Match4.Count -eq 0) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$1,000,000 " + "WINNER - 5 White Balls") + ($script:winnings+=1000000)}
-    Elseif ($Match4.Count -eq 5 -and $PB_Match4.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("JACKPOT WINNER") + ($script:winnings+=5000000)}
-
-    #DRAW 5
-    $RTB.AppendText("`r`n")
-    $RTB.AppendText("              5th Draw: ")
-    $Draw5_Array[0..4] | ForEach-Object {
-    if ($Win_Array[0..4] -contains $_) {
-        $RTB.SelectionColor = "Green"
-        $oldFont = $RTB.Selectionfont
-        $RTB.SelectionFont = New-Object System.Drawing.Font('Microsoft Sans Serif',20,[System.Drawing.FontStyle]([System.Drawing.FontStyle]::Bold -bor [System.Drawing.FontStyle]::Underline))
-        $RTB.AppendText($_)
-        $RTB.SelectionFont = New-Object System.Drawing.Font($oldFont, [System.Drawing.Fontstyle]::Bold)
-        $RTB.AppendText(" ")
-    } else {
-        $RTB.SelectionColor = "Black"
-        $RTB.AppendText($_)
-        $RTB.AppendText(" ")
-        }
-    }
-
-    $Draw5_Array[-1] | ForEach-Object {
-    if ($Win_Array[-1] -contains $_) {
-        $RTB.SelectionColor = "Green"
-        $oldFont = $RTB.Selectionfont
-        $RTB.SelectionFont = New-Object System.Drawing.Font('Microsoft Sans Serif',20,[System.Drawing.FontStyle]([System.Drawing.FontStyle]::Bold -bor [System.Drawing.FontStyle]::Underline))
-        $RTB.AppendText($_)
-        $RTB.SelectionFont = New-Object System.Drawing.Font($oldFont, [System.Drawing.Fontstyle]::Bold)
-        $RTB.AppendText(" ")
-    } else {
-        $RTB.SelectionColor = "Black"
-        $RTB.AppendText($_)
-        $RTB.AppendText(" ")
-        }
-    }
-
-    #DRAW 5 Matches
-    If ($Match5.Count -eq 0 -and $PB_Match5.Count -eq 0) {$RTB.SelectionColor = "Red"; $RTB.AppendText("LOSER - No Matches")}
-    Elseif ($Match5.Count -eq 0 -and $PB_Match5.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$4 " + "WINNER - Powerball Matched") + ($script:winnings+=4)}
-    Elseif ($Match5.Count -eq 1 -and $PB_Match5.Count -eq 0) {$RTB.SelectionColor = "Red"; $RTB.AppendText("LOSER - 1 White Ball Matched")}
-    Elseif ($Match5.Count -eq 1 -and $PB_Match5.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$4 " + "WINNER - 1 White Ball + PB") + ($script:winnings+=4)}
-    Elseif ($Match5.Count -eq 2 -and $PB_Match5.Count -eq 0) {$RTB.SelectionColor = "Red"; $RTB.AppendText("LOSER - 2 White Balls")}
-    Elseif ($Match5.Count -eq 2 -and $PB_Match5.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$7 " + "WINNER - 2 White Balls + PB") + ($script:winnings+=7)}
-    Elseif ($Match5.Count -eq 3 -and $PB_Match5.Count -eq 0) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$7 " + "WINNER - 3 White Balls") + ($script:winnings+=7)}
-    Elseif ($Match5.Count -eq 3 -and $PB_Match5.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$100 " + "WINNER - 3 White Balls + PB") + ($script:winnings+=100)}
-    Elseif ($Match5.Count -eq 4 -and $PB_Match5.Count -eq 0) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$100 " + "WINNER - 4 White Balls") + ($script:winnings+=100)}
-    Elseif ($Match5.Count -eq 4 -and $PB_Match5.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$50,000 " + "WINNER - 4 White Balls + PB") + ($script:winnings+=50000)}
-    Elseif ($Match5.Count -eq 5 -and $PB_Match5.Count -eq 0) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$1,000,000 " + "WINNER - 5 White Balls") + ($script:winnings+=1000000)}
-    Elseif ($Match5.Count -eq 5 -and $PB_Match5.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("JACKPOT WINNER") + ($script:winnings+=5000000)}
-
-    #DRAW 6
-    $RTB.AppendText("`r`n")
-    $RTB.AppendText("              6th Draw: ")
-    $Draw6_Array[0..4] | ForEach-Object {
-    if ($Win_Array[0..4] -contains $_) {
-        $RTB.SelectionColor = "Green"
-        $oldFont = $RTB.Selectionfont
-        $RTB.SelectionFont = New-Object System.Drawing.Font('Microsoft Sans Serif',20,[System.Drawing.FontStyle]([System.Drawing.FontStyle]::Bold -bor [System.Drawing.FontStyle]::Underline))
-        $RTB.AppendText($_)
-        $RTB.SelectionFont = New-Object System.Drawing.Font($oldFont, [System.Drawing.Fontstyle]::Bold)
-        $RTB.AppendText(" ")
-    } else {
-        $RTB.SelectionColor = "Black"
-        $RTB.AppendText($_)
-        $RTB.AppendText(" ")
-        }
-    }
-
-    $Draw6_Array[-1] | ForEach-Object {
-    if ($Win_Array[-1] -contains $_) {
-        $RTB.SelectionColor = "Green"
-        $oldFont = $RTB.Selectionfont
-        $RTB.SelectionFont = New-Object System.Drawing.Font('Microsoft Sans Serif',20,[System.Drawing.FontStyle]([System.Drawing.FontStyle]::Bold -bor [System.Drawing.FontStyle]::Underline))
-        $RTB.AppendText($_)
-        $RTB.SelectionFont = New-Object System.Drawing.Font($oldFont, [System.Drawing.Fontstyle]::Bold)
-        $RTB.AppendText(" ")
-    } else {
-        $RTB.SelectionColor = "Black"
-        $RTB.AppendText($_)
-        $RTB.AppendText(" ")
-        }
-    }
-
-    #DRAW 6 Matches
-    If ($Match6.Count -eq 0 -and $PB_Match6.Count -eq 0) {$RTB.SelectionColor = "Red"; $RTB.AppendText("LOSER - No Matches")}
-    Elseif ($Match6.Count -eq 0 -and $PB_Match6.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$4 " + "WINNER - Powerball Matched") + ($script:winnings+=4)}
-    Elseif ($Match6.Count -eq 1 -and $PB_Match6.Count -eq 0) {$RTB.SelectionColor = "Red"; $RTB.AppendText("LOSER - 1 White Ball Matched")}
-    Elseif ($Match6.Count -eq 1 -and $PB_Match6.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$4 " + "WINNER - 1 White Ball + PB") + ($script:winnings+=4)}
-    Elseif ($Match6.Count -eq 2 -and $PB_Match6.Count -eq 0) {$RTB.SelectionColor = "Red"; $RTB.AppendText("LOSER - 2 White Balls")}
-    Elseif ($Match6.Count -eq 2 -and $PB_Match6.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$7 " + "WINNER - 2 White Balls + PB") + ($script:winnings+=7)}
-    Elseif ($Match6.Count -eq 3 -and $PB_Match6.Count -eq 0) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$7 " + "WINNER - 3 White Balls") + ($script:winnings+=7)}
-    Elseif ($Match6.Count -eq 3 -and $PB_Match6.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$100 " + "WINNER - 3 White Balls + PB") + ($script:winnings+=100)}
-    Elseif ($Match6.Count -eq 4 -and $PB_Match6.Count -eq 0) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$100 " + "WINNER - 4 White Balls") + ($script:winnings+=100)}
-    Elseif ($Match6.Count -eq 4 -and $PB_Match6.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$50,000 " + "WINNER - 4 White Balls + PB") + ($script:winnings+=50000)}
-    Elseif ($Match6.Count -eq 5 -and $PB_Match6.Count -eq 0) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$1,000,000 " + "WINNER - 5 White Balls") + ($script:winnings+=1000000)}
-    Elseif ($Match6.Count -eq 5 -and $PB_Match6.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("JACKPOT WINNER") + ($script:winnings+=5000000)}
-
-    #DRAW 7
-    $RTB.AppendText("`r`n")
-    $RTB.AppendText("              7th Draw: ")
-    $Draw7_Array[0..4] | ForEach-Object {
-    if ($Win_Array[0..4] -contains $_) {
-        $RTB.SelectionColor = "Green"
-        $oldFont = $RTB.Selectionfont
-        $RTB.SelectionFont = New-Object System.Drawing.Font('Microsoft Sans Serif',20,[System.Drawing.FontStyle]([System.Drawing.FontStyle]::Bold -bor [System.Drawing.FontStyle]::Underline))
-        $RTB.AppendText($_)
-        $RTB.SelectionFont = New-Object System.Drawing.Font($oldFont, [System.Drawing.Fontstyle]::Bold)
-        $RTB.AppendText(" ")
-    } else {
-        $RTB.SelectionColor = "Black"
-        $RTB.AppendText($_)
-        $RTB.AppendText(" ")
-        }
-    }
-
-    $Draw7_Array[-1] | ForEach-Object {
-    if ($Win_Array[-1] -contains $_) {
-        $RTB.SelectionColor = "Green"
-        $oldFont = $RTB.Selectionfont
-        $RTB.SelectionFont = New-Object System.Drawing.Font('Microsoft Sans Serif',20,[System.Drawing.FontStyle]([System.Drawing.FontStyle]::Bold -bor [System.Drawing.FontStyle]::Underline))
-        $RTB.AppendText($_)
-        $RTB.SelectionFont = New-Object System.Drawing.Font($oldFont, [System.Drawing.Fontstyle]::Bold)
-        $RTB.AppendText(" ")
-    } else {
-        $RTB.SelectionColor = "Black"
-        $RTB.AppendText($_)
-        $RTB.AppendText(" ")
-        }
-    }
-
-    #DRAW 7 Matches
-    If ($Match7.Count -eq 0 -and $PB_Match7.Count -eq 0) {$RTB.SelectionColor = "Red"; $RTB.AppendText("LOSER - No Matches")}
-    Elseif ($Match7.Count -eq 0 -and $PB_Match7.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$4 " + "WINNER - Powerball Matched") + ($script:winnings+=4)}
-    Elseif ($Match7.Count -eq 1 -and $PB_Match7.Count -eq 0) {$RTB.SelectionColor = "Red"; $RTB.AppendText("LOSER - 1 White Ball Matched")}
-    Elseif ($Match7.Count -eq 1 -and $PB_Match7.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$4 " + "WINNER - 1 White Ball + PB") + ($script:winnings+=4)}
-    Elseif ($Match7.Count -eq 2 -and $PB_Match7.Count -eq 0) {$RTB.SelectionColor = "Red"; $RTB.AppendText("LOSER - 2 White Balls")}
-    Elseif ($Match7.Count -eq 2 -and $PB_Match7.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$7 " + "WINNER - 2 White Balls + PB") + ($script:winnings+=7)}
-    Elseif ($Match7.Count -eq 3 -and $PB_Match7.Count -eq 0) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$7 " + "WINNER - 3 White Balls") + ($script:winnings+=7)}
-    Elseif ($Match7.Count -eq 3 -and $PB_Match7.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$100 " + "WINNER - 3 White Balls + PB") + ($script:winnings+=100)}
-    Elseif ($Match7.Count -eq 4 -and $PB_Match7.Count -eq 0) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$100 " + "WINNER - 4 White Balls") + ($script:winnings+=100)}
-    Elseif ($Match7.Count -eq 4 -and $PB_Match7.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$50,000 " + "WINNER - 4 White Balls + PB") + ($script:winnings+=50000)}
-    Elseif ($Match7.Count -eq 5 -and $PB_Match7.Count -eq 0) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$1,000,000 " + "WINNER - 5 White Balls") + ($script:winnings+=1000000)}
-    Elseif ($Match7.Count -eq 5 -and $PB_Match7.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("JACKPOT WINNER") + ($script:winnings+=5000000)}
-
-    #DRAW 8
-    $RTB.AppendText("`r`n")
-    $RTB.AppendText("              8th Draw: ")
-    $Draw8_Array[0..4] | ForEach-Object {
-    if ($Win_Array[0..4] -contains $_) {
-        $RTB.SelectionColor = "Green"
-        $oldFont = $RTB.Selectionfont
-        $RTB.SelectionFont = New-Object System.Drawing.Font('Microsoft Sans Serif',20,[System.Drawing.FontStyle]([System.Drawing.FontStyle]::Bold -bor [System.Drawing.FontStyle]::Underline))
-        $RTB.AppendText($_)
-        $RTB.SelectionFont = New-Object System.Drawing.Font($oldFont, [System.Drawing.Fontstyle]::Bold)
-        $RTB.AppendText(" ")
-    } else {
-        $RTB.SelectionColor = "Black"
-        $RTB.AppendText($_)
-        $RTB.AppendText(" ")
-        }
-    }
-
-    $Draw8_Array[-1] | ForEach-Object {
-    if ($Win_Array[-1] -contains $_) {
-        $RTB.SelectionColor = "Green"
-        $oldFont = $RTB.Selectionfont
-        $RTB.SelectionFont = New-Object System.Drawing.Font('Microsoft Sans Serif',20,[System.Drawing.FontStyle]([System.Drawing.FontStyle]::Bold -bor [System.Drawing.FontStyle]::Underline))
-        $RTB.AppendText($_)
-        $RTB.SelectionFont = New-Object System.Drawing.Font($oldFont, [System.Drawing.Fontstyle]::Bold)
-        $RTB.AppendText(" ")
-    } else {
-        $RTB.SelectionColor = "Black"
-        $RTB.AppendText($_)
-        $RTB.AppendText(" ")
-        }
-    }
-
-    #DRAW 8 Matches
-    If ($Match8.Count -eq 0 -and $PB_Match8.Count -eq 0) {$RTB.SelectionColor = "Red"; $RTB.AppendText("LOSER - No Matches")}
-    Elseif ($Match8.Count -eq 0 -and $PB_Match8.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$4 " + "WINNER - Powerball Matched") + ($script:winnings+=4)}
-    Elseif ($Match8.Count -eq 1 -and $PB_Match8.Count -eq 0) {$RTB.SelectionColor = "Red"; $RTB.AppendText("LOSER - 1 White Ball Matched")}
-    Elseif ($Match8.Count -eq 1 -and $PB_Match8.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$4 " + "WINNER - 1 White Ball + PB") + ($script:winnings+=4)}
-    Elseif ($Match8.Count -eq 2 -and $PB_Match8.Count -eq 0) {$RTB.SelectionColor = "Red"; $RTB.AppendText("LOSER - 2 White Balls")}
-    Elseif ($Match8.Count -eq 2 -and $PB_Match8.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$7 " + "WINNER - 2 White Balls + PB") + ($script:winnings+=7)}
-    Elseif ($Match8.Count -eq 3 -and $PB_Match8.Count -eq 0) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$7 " + "WINNER - 3 White Balls") + ($script:winnings+=7)}
-    Elseif ($Match8.Count -eq 3 -and $PB_Match8.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$100 " + "WINNER - 3 White Balls + PB") + ($script:winnings+=100)}
-    Elseif ($Match8.Count -eq 4 -and $PB_Match8.Count -eq 0) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$100 " + "WINNER - 4 White Balls") + ($script:winnings+=100)}
-    Elseif ($Match8.Count -eq 4 -and $PB_Match8.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$50,000 " + "WINNER - 4 White Balls + PB") + ($script:winnings+=50000)}
-    Elseif ($Match8.Count -eq 5 -and $PB_Match8.Count -eq 0) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$1,000,000 " + "WINNER - 5 White Balls") + ($script:winnings+=1000000)}
-    Elseif ($Match8.Count -eq 5 -and $PB_Match8.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("JACKPOT WINNER") + ($script:winnings+=5000000)}
-
-    #DRAW 9
-    $RTB.AppendText("`r`n")
-    $RTB.AppendText("              9th Draw: ")
-    $Draw9_Array[0..4] | ForEach-Object {
-    if ($Win_Array[0..4] -contains $_) {
-        $RTB.SelectionColor = "Green"
-        $oldFont = $RTB.Selectionfont
-        $RTB.SelectionFont = New-Object System.Drawing.Font('Microsoft Sans Serif',20,[System.Drawing.FontStyle]([System.Drawing.FontStyle]::Bold -bor [System.Drawing.FontStyle]::Underline))
-        $RTB.AppendText($_)
-        $RTB.SelectionFont = New-Object System.Drawing.Font($oldFont, [System.Drawing.Fontstyle]::Bold)
-        $RTB.AppendText(" ")
-    } else {
-        $RTB.SelectionColor = "Black"
-        $RTB.AppendText($_)
-        $RTB.AppendText(" ")
-        }
-    }
-
-    $Draw9_Array[-1] | ForEach-Object {
-    if ($Win_Array[-1] -contains $_) {
-        $RTB.SelectionColor = "Green"
-        $oldFont = $RTB.Selectionfont
-        $RTB.SelectionFont = New-Object System.Drawing.Font('Microsoft Sans Serif',20,[System.Drawing.FontStyle]([System.Drawing.FontStyle]::Bold -bor [System.Drawing.FontStyle]::Underline))
-        $RTB.AppendText($_)
-        $RTB.SelectionFont = New-Object System.Drawing.Font($oldFont, [System.Drawing.Fontstyle]::Bold)
-        $RTB.AppendText(" ")
-    } else {
-        $RTB.SelectionColor = "Black"
-        $RTB.AppendText($_)
-        $RTB.AppendText(" ")
-        }
-    }
-
-    #DRAW 9 Matches
-    If ($Match9.Count -eq 0 -and $PB_Match9.Count -eq 0) {$RTB.SelectionColor = "Red"; $RTB.AppendText("LOSER - No Matches")}
-    Elseif ($Match9.Count -eq 0 -and $PB_Match9.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$4 " + "WINNER - Powerball Matched") + ($script:winnings+=4)}
-    Elseif ($Match9.Count -eq 1 -and $PB_Match9.Count -eq 0) {$RTB.SelectionColor = "Red"; $RTB.AppendText("LOSER - 1 White Ball Matched")}
-    Elseif ($Match9.Count -eq 1 -and $PB_Match9.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$4 " + "WINNER - 1 White Ball + PB") + ($script:winnings+=4)}
-    Elseif ($Match9.Count -eq 2 -and $PB_Match9.Count -eq 0) {$RTB.SelectionColor = "Red"; $RTB.AppendText("LOSER - 2 White Balls")}
-    Elseif ($Match9.Count -eq 2 -and $PB_Match9.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$7 " + "WINNER - 2 White Balls + PB") + ($script:winnings+=7)}
-    Elseif ($Match9.Count -eq 3 -and $PB_Match9.Count -eq 0) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$7 " + "WINNER - 3 White Balls") + ($script:winnings+=7)}
-    Elseif ($Match9.Count -eq 3 -and $PB_Match9.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$100 " + "WINNER - 3 White Balls + PB") + ($script:winnings+=100)}
-    Elseif ($Match9.Count -eq 4 -and $PB_Match9.Count -eq 0) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$100 " + "WINNER - 4 White Balls") + ($script:winnings+=100)}
-    Elseif ($Match9.Count -eq 4 -and $PB_Match9.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$50,000 " + "WINNER - 4 White Balls + PB") + ($script:winnings+=50000)}
-    Elseif ($Match9.Count -eq 5 -and $PB_Match9.Count -eq 0) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$1,000,000 " + "WINNER - 5 White Balls") + ($script:winnings+=1000000)}
-    Elseif ($Match9.Count -eq 5 -and $PB_Match9.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("JACKPOT WINNER") + ($script:winnings+=5000000)}
-
-    #DRAW 10
-    $RTB.AppendText("`r`n")
-    $RTB.AppendText("            10th Draw: ")
-    $Draw10_Array[0..4] | ForEach-Object {
-    if ($Win_Array[0..4] -contains $_) {
-        $RTB.SelectionColor = "Green"
-        $oldFont = $RTB.Selectionfont
-        $RTB.SelectionFont = New-Object System.Drawing.Font('Microsoft Sans Serif',20,[System.Drawing.FontStyle]([System.Drawing.FontStyle]::Bold -bor [System.Drawing.FontStyle]::Underline))
-        $RTB.AppendText($_)
-        $RTB.SelectionFont = New-Object System.Drawing.Font($oldFont, [System.Drawing.Fontstyle]::Bold)
-        $RTB.AppendText(" ")
-    } else {
-        $RTB.SelectionColor = "Black"
-        $RTB.AppendText($_)
-        $RTB.AppendText(" ")
-        }
-    }
-
-    $Draw10_Array[-1] | ForEach-Object {
-    if ($Win_Array[-1] -contains $_) {
-        $RTB.SelectionColor = "Green"
-        $oldFont = $RTB.Selectionfont
-        $RTB.SelectionFont = New-Object System.Drawing.Font('Microsoft Sans Serif',20,[System.Drawing.FontStyle]([System.Drawing.FontStyle]::Bold -bor [System.Drawing.FontStyle]::Underline))
-        $RTB.AppendText($_)
-        $RTB.SelectionFont = New-Object System.Drawing.Font($oldFont, [System.Drawing.Fontstyle]::Bold)
-        $RTB.AppendText(" ")
-    } else {
-        $RTB.SelectionColor = "Black"
-        $RTB.AppendText($_)
-        $RTB.AppendText(" ")
-        }
-    }
-
-    #DRAW 10 Matches
-    If ($Match10.Count -eq 0 -and $PB_Match10.Count -eq 0) {$RTB.SelectionColor = "Red"; $RTB.AppendText("LOSER - No Matches")}
-    Elseif ($Match10.Count -eq 0 -and $PB_Match10.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$4 " + "WINNER - Powerball Matched") + ($script:winnings+=4)}
-    Elseif ($Match10.Count -eq 1 -and $PB_Match10.Count -eq 0) {$RTB.SelectionColor = "Red"; $RTB.AppendText("LOSER - 1 White Ball Matched")}
-    Elseif ($Match10.Count -eq 1 -and $PB_Match10.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$4 " + "WINNER - 1 White Ball + PB") + ($script:winnings+=4)}
-    Elseif ($Match10.Count -eq 2 -and $PB_Match10.Count -eq 0) {$RTB.SelectionColor = "Red"; $RTB.AppendText("LOSER - 2 White Balls")}
-    Elseif ($Match10.Count -eq 2 -and $PB_Match10.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$7 " + "WINNER - 2 White Balls + PB") + ($script:winnings+=7)}
-    Elseif ($Match10.Count -eq 3 -and $PB_Match10.Count -eq 0) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$7 " + "WINNER - 3 White Balls") + ($script:winnings+=7)}
-    Elseif ($Match10.Count -eq 3 -and $PB_Match10.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$100 " + "WINNER - 3 White Balls + PB") + ($script:winnings+=100)}
-    Elseif ($Match10.Count -eq 4 -and $PB_Match10.Count -eq 0) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$100 " + "WINNER - 4 White Balls") + ($script:winnings+=100)}
-    Elseif ($Match10.Count -eq 4 -and $PB_Match10.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$50,000 " + "WINNER - 4 White Balls + PB") + ($script:winnings+=50000)}
-    Elseif ($Match10.Count -eq 5 -and $PB_Match10.Count -eq 0) {$RTB.SelectionColor = "Green"; $RTB.AppendText("`$1,000,000 " + "WINNER - 5 White Balls") + ($script:winnings+=1000000)}
-    Elseif ($Match10.Count -eq 5 -and $PB_Match10.Count -eq 1) {$RTB.SelectionColor = "Green"; $RTB.AppendText("JACKPOT WINNER") + ($script:winnings+=5000000)}
-
-    $RTB.AppendText("`r`n")
-    $RTB.AppendText("`r`n")
-    $RTB.AppendText("Spent = $" + $count + "      Won = $" + $winnings)
+function ApplyUnderline {
+	$RTB.SelectionFont = New-Object System.Drawing.Font ("Microsoft Sans Serif",15,[System.Drawing.FontStyle]([System.Drawing.FontStyle]::Bold.value__ -bor [System.Drawing.FontStyle]::Underline.value__))
 }
 
-Function Show-MainForm {
-    $Form = New-Object System.Windows.Forms.Form
-    $Form.Size = New-Object System.Drawing.Size(1900,1300)
-    $Form.text = "Lottery Simulator"
+function Format-MatchingNumbers {
+	param(
+		[array]$winningNumbers,
+		[array]$drawNumbers
+	)
 
-    $RTB = New-Object System.Windows.Forms.RichTextBox
-    $RTB.Font = New-Object System.Drawing.Font("Microsoft Sans Serif",40,[System.Drawing.FontStyle]::Bold)
-    $RTB.Location = New-Object System.Drawing.Size(10,100)
-    $RTB.Size = New-Object System.Drawing.Size(1800,900)
-    $RTB.MultiLine = $True
-    $RTB.ScrollBars = "Vertical"    
+	$formattedNumbers = @()
+	$regularWinningNumbers = $winningNumbers[0..4]
+	$powerBallWinningNumber = $winningNumbers[5]
 
-    GetNumbers
-    AddCounter
+	for ($i = 0; $i -lt 5; $i++) {
+		$drawNumber = $drawNumbers[$i]
+		if ($regularWinningNumbers -contains $drawNumber) {
+			$RTB.SelectionColor = 'Green'
+			ApplyUnderline
+			$RTB.AppendText($drawNumber)
+			$RTB.SelectionColor = 'Black'
+			$RTB.SelectionFont = New-Object System.Drawing.Font ("Microsoft Sans Serif",15,[System.Drawing.FontStyle]::Bold)
+			$RTB.AppendText(' ')
+		} else {
+			$RTB.SelectionFont = New-Object System.Drawing.Font ("Microsoft Sans Serif",15,[System.Drawing.FontStyle]::Bold)
+			$RTB.AppendText($drawNumber + ' ')
+		}
+	}
 
-    $Label = New-Object System.Windows.Forms.Label
-    $Label.Font = New-Object System.Drawing.Font("Microsoft Sans Serif",25,[System.Drawing.FontStyle]::Bold)
-    $Label.Text = "Powershell Lottery Simulator"
-    $Label.Location  = New-Object System.Drawing.Point(10,10)
-    $Label.AutoSize = $true
-
-    $PlayButton = New-Object System.Windows.Forms.Button
-    $PlayButton.Font = New-Object System.Drawing.Font("Microsoft Sans Serif",15,[System.Drawing.FontStyle]::Bold)
-    $PlayButton.Location = New-Object System.Drawing.Size(50,1050)
-    $PlayButton.Size = New-Object System.Drawing.Size(150,80)
-    $PlayButton.Text = "Play"
-    $PlayButton.Add_Click({ GetNumbers ; AddCounter })
-    
-    $CloseButton = New-Object System.Windows.Forms.Button
-    $CloseButton.Font = New-Object System.Drawing.Font("Microsoft Sans Serif",15,[System.Drawing.FontStyle]::Bold)
-    $CloseButton.Location = New-Object System.Drawing.Size(250,1050)
-    $CloseButton.Size = New-Object System.Drawing.Size(150,80)
-    $CloseButton.Text = "Close"
-    $CloseButton.Add_Click({ $Form.Close() })
-
-    $Form.Controls.AddRange(@($RTB, $Label, $PlayButton, $CloseButton))
-    $Form.ShowDialog()
+	$drawPowerBallNumber = $drawNumbers[5]
+	if ($drawPowerBallNumber -eq $powerBallWinningNumber) {
+		$RTB.SelectionColor = 'Green'
+		ApplyUnderline
+		$RTB.AppendText($drawPowerBallNumber)
+		$RTB.SelectionColor = 'Black'
+		$RTB.SelectionFont = New-Object System.Drawing.Font ("Microsoft Sans Serif",15,[System.Drawing.FontStyle]::Bold)
+		$RTB.AppendText(' ')
+	} else {
+		$RTB.AppendText($drawPowerBallNumber)
+	}
 }
 
-Main | Out-Null
+function Generate-PowerBallNumbers {
+	@(Get-Random -Count 5 -InputObject (1..69) | ForEach-Object { $_.ToString("00") } | Sort-Object) + (Get-Random -Minimum 1 -Maximum 26 | ForEach-Object { $_.ToString("00") })
+}
+
+$numberOfDraws = 10
+$drawsArray = @()
+
+for ($i = 0; $i -lt $numberOfDraws; $i++) {
+	$drawsArray +=,@(Generate-PowerBallNumbers)
+}
+
+$Draw1_Array = $drawsArray[0]
+$Draw2_Array = $drawsArray[1]
+$Draw3_Array = $drawsArray[2]
+$Draw4_Array = $drawsArray[3]
+$Draw5_Array = $drawsArray[4]
+$Draw6_Array = $drawsArray[5]
+$Draw7_Array = $drawsArray[6]
+$Draw8_Array = $drawsArray[7]
+$Draw9_Array = $drawsArray[8]
+$Draw10_Array = $drawsArray[9]
+
+function Update-WinningNumbersAndAmount {
+    $script:totalPlays++
+	$Win_Array = Generate-PowerBallNumbers
+	$RTB.Clear()
+	$RTB.SelectionFont = New-Object System.Drawing.Font ("Microsoft Sans Serif",15,[System.Drawing.FontStyle]::Bold)
+	$RTB.AppendText("Winning Numbers: " + ($Win_Array -join ' '))
+	$RTB.AppendText("`r`n")
+	$RTB.AppendText("`r`n")
+
+	for ($i = 0; $i -lt $numberOfDraws; $i++) {
+		$drawsArray[$i] = Generate-PowerBallNumbers
+		$whiteBallMatches = @(Compare-Object $Win_Array[0..4] $drawsArray[$i][0..4] -IncludeEqual -ExcludeDifferent).Count
+		$powerBallMatch = $Win_Array[5] -eq $drawsArray[$i][5]
+		$RTB.SelectionColor = "Black"
+		
+        #$RTB.AppendText("Draw " + ($i + 1) + ": ")
+        $RTB.AppendText("Draw {0:D2}: " -f ($i + 1))
+
+		Format-MatchingNumbers -winningNumbers $Win_Array -drawNumbers $drawsArray[$i]
+		$displayResult = ""
+		switch ($whiteBallMatches) {
+			0 {
+				if ($powerBallMatch) {
+					$displayResult = "`$4 WINNER - Powerball Matched"
+					$script:winnings += 4
+				} else {
+					$displayResult = "LOSER - 0 White Balls Matched"
+				}
+			}
+			1 {
+				if ($powerBallMatch) {
+					$displayResult = "`$4 WINNER - 1 White Ball + PB"
+					$script:winnings += 4
+				} else {
+					$displayResult = "LOSER - 1 White Ball Matched"
+				}
+			}
+			2 {
+				if ($powerBallMatch) {
+					$displayResult = "`$7 WINNER - 2 White Balls + PB"
+					$script:winnings += 7
+				} else {
+					$displayResult = "LOSER - 2 White Balls"
+				}
+			}
+			3 {
+				if ($powerBallMatch) {
+					$displayResult = "`$100 WINNER - 3 White Balls + PB"
+					$script:winnings += 100
+				} else {
+					$displayResult = "`$7 WINNER - 3 White Balls"
+					$script:winnings += 7
+				}
+			}
+			4 {
+				if ($powerBallMatch) {
+					$displayResult = "`$50,000 WINNER - 4 White Balls + PB"
+					$script:winnings += 50000
+				} else {
+					$displayResult = "`$100 WINNER - 4 White Balls"
+					$script:winnings += 100
+				}
+			}
+			5 {
+				if ($powerBallMatch) {
+					$displayResult = "JACKPOT WINNER"
+					$script:winnings += 5000000
+				} else {
+					$displayResult = "`$1,000,000 WINNER - 5 White Balls"
+					$script:winnings += 1000000
+				}
+			}
+		}
+		if ($displayResult.Contains("LOSER")) {
+			$RTB.SelectionColor = 'Red'
+		} elseif ($displayResult.Contains("WINNER")) {
+			$RTB.SelectionColor = 'Green'
+		}
+		$RTB.AppendText(" - " + $displayResult)
+		$RTB.SelectionColor = 'Black'
+		$RTB.AppendText("`r`n")
+	}
+    $RTB.AppendText("`r`n")
+	#$RTB.AppendText("Spent = $" + $count + "      Won = $" + $winnings)
+    $RTB.AppendText("Spent = $" + $count.ToString("N0") + "      Won = $" + $winnings.ToString("N0"))
+    $RTB.AppendText("`r`n")
+    $ROI = (($winnings - $count) / $count) * 100
+    $RTB.AppendText("              ROI = " + "{0:N2}" -f $ROI + "%")
+    $RTB.AppendText("`r`n")
+    $PositiveROI = 100 + $ROI
+    $RTB.AppendText("Positive ROI = " + "{0:N2}" -f $PositiveROI + "%")
+    $RTB.AppendText("`r`n")
+    $RTB.AppendText("Total Plays: " + $totalPlays)
+
+
+}
+
+function Show-MainForm {
+
+	$Form = New-Object System.Windows.Forms.Form
+	$Form.Size = New-Object System.Drawing.Size (1000,800)
+	$Form.text = "Lottery Simulator"
+
+	$RTB = New-Object System.Windows.Forms.RichTextBox
+	$RTB.Font = New-Object System.Drawing.Font ("Microsoft Sans Serif",15,[System.Drawing.FontStyle]::Bold)
+	$RTB.Location = New-Object System.Drawing.Size (20,20)
+	$RTB.Size = New-Object System.Drawing.Size (900,500)
+	$RTB.MultiLine = $True
+	$RTB.ScrollBars = "Vertical"
+
+	$PlayButton = New-Object System.Windows.Forms.Button
+	$PlayButton.Font = New-Object System.Drawing.Font ("Microsoft Sans Serif",15,[System.Drawing.FontStyle]::Bold)
+	$PlayButton.Location = New-Object System.Drawing.Size (20,600)
+	$PlayButton.Size = New-Object System.Drawing.Size (150,80)
+	$PlayButton.text = "Play"
+	$PlayButton.Add_Click({ Update-WinningNumbersAndAmount; AddCounter })
+
+	$PlayUntilJackpotButton = New-Object System.Windows.Forms.Button
+	$PlayUntilJackpotButton.Font = New-Object System.Drawing.Font ("Microsoft Sans Serif",10,[System.Drawing.FontStyle]::Bold)
+	$PlayUntilJackpotButton.Location = New-Object System.Drawing.Size (200,600)
+	$PlayUntilJackpotButton.Size = New-Object System.Drawing.Size (300,80)
+	$PlayUntilJackpotButton.text = "Play Until Jackpot or Million"
+	$PlayUntilJackpotButton.Add_Click({ PlayUntilJackpotOrMillion })
+
+    $PlayCountLabel = New-Object System.Windows.Forms.Label
+    $PlayCountLabel.Font = New-Object System.Drawing.Font("Microsoft Sans Serif",15,[System.Drawing.FontStyle]::Bold)
+    $PlayCountLabel.Location = New-Object System.Drawing.Size(450,1050)
+    $PlayCountLabel.Size = New-Object System.Drawing.Size(300,80)
+    $PlayCountLabel.Text = "Total Plays: 0"
+
+	$ElapsedTimeLabel = New-Object System.Windows.Forms.Label
+	$ElapsedTimeLabel.Font = New-Object System.Drawing.Font ("Microsoft Sans Serif",15,[System.Drawing.FontStyle]::Bold)
+	$ElapsedTimeLabel.Location = New-Object System.Drawing.Size (20,550)
+	$ElapsedTimeLabel.Size = New-Object System.Drawing.Size (350,80)
+	$ElapsedTimeLabel.text = "Elapsed Time: 00:00:00"
+
+	$simulationTimer = New-Object System.Windows.Forms.Timer
+	# 1 Second Interval
+	#$simulationTimer.Interval = 1000
+	# Half Second Interval
+	#$simulationTimer.Interval = 500
+	# Quarter Second Interval
+	$simulationTimer.Interval = 250
+
+	$stopWatch = New-Object System.Diagnostics.Stopwatch
+
+	function PlayUntilJackpotOrMillion {
+		$script:stopSimulation = $false
+		$stopWatch.Start()
+		$simulationTimer.Start()
+	}
+	$simulationTimer.Add_Tick({
+			if ($script:stopSimulation) {
+				$simulationTimer.Stop()
+				$stopWatch.Stop()
+			} else {
+				Update-WinningNumbersAndAmount
+				AddCounter
+				$ElapsedTimeLabel.text = "Elapsed Time: " + $stopWatch.Elapsed.ToString("hh\:mm\:ss")
+
+				if ($displayResult -eq "JACKPOT WINNER" -or $displayResult -eq "`$1,000,000 WINNER - 5 White Balls") {
+					$simulationTimer.Stop()
+					$stopWatch.Stop()
+				}
+			}
+		})
+
+	$StopButton = New-Object System.Windows.Forms.Button
+	$StopButton.Font = New-Object System.Drawing.Font ("Microsoft Sans Serif",15,[System.Drawing.FontStyle]::Bold)
+	$StopButton.Location = New-Object System.Drawing.Size (600,600)
+	$StopButton.Size = New-Object System.Drawing.Size (150,80)
+	$StopButton.text = "Stop"
+	$StopButton.Add_Click({ $script:stopSimulation = $true })
+
+	$CloseButton = New-Object System.Windows.Forms.Button
+	$CloseButton.Font = New-Object System.Drawing.Font ("Microsoft Sans Serif",15,[System.Drawing.FontStyle]::Bold)
+	$CloseButton.Location = New-Object System.Drawing.Size (750,600)
+	$CloseButton.Size = New-Object System.Drawing.Size (150,80)
+	$CloseButton.text = "Close"
+	$CloseButton.Add_Click({ $Form.Close() })
+
+	$Form.Controls.AddRange(@($RTB,$Label,$PlayButton,$CloseButton,$PlayUntilJackpotButton,$PlayCountLabel,$ElapsedTimeLabel,$StopButton))
+	Update-WinningNumbersAndAmount
+	AddCounter
+	$Form.ShowDialog()
+	$Form.Add_FormClosing({ $script:stopSimulation = $true })
+}
+Show-MainForm
