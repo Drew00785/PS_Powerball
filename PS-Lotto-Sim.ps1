@@ -169,98 +169,108 @@ function Update-WinningNumbersAndAmount {
     $RTB.AppendText("Positive ROI = " + "{0:N2}" -f $PositiveROI + "%")
     $RTB.AppendText("`r`n")
     $RTB.AppendText("Total Plays: " + $totalPlays)
-
-
 }
 
 function Show-MainForm {
 
-	$Form = New-Object System.Windows.Forms.Form
-	$Form.Size = New-Object System.Drawing.Size (1000,800)
-	$Form.text = "Lottery Simulator"
+    $primaryScreen = [System.Windows.Forms.Screen]::PrimaryScreen
+    $screenWidth = $primaryScreen.WorkingArea.Width
+    $screenHeight = $primaryScreen.WorkingArea.Height
 
-	$RTB = New-Object System.Windows.Forms.RichTextBox
-	$RTB.Font = New-Object System.Drawing.Font ("Microsoft Sans Serif",15,[System.Drawing.FontStyle]::Bold)
-	$RTB.Location = New-Object System.Drawing.Size (20,20)
-	$RTB.Size = New-Object System.Drawing.Size (900,500)
-	$RTB.MultiLine = $True
-	$RTB.ScrollBars = "Vertical"
+    $scaleFactorWidth = $screenWidth / 1920  # Assuming 1920x1080 as base resolution
+    $scaleFactorHeight = $screenHeight / 1080
+    $scaleFactorFont = ($scaleFactorWidth + $scaleFactorHeight) / 2
 
-	$PlayButton = New-Object System.Windows.Forms.Button
-	$PlayButton.Font = New-Object System.Drawing.Font ("Microsoft Sans Serif",15,[System.Drawing.FontStyle]::Bold)
-	$PlayButton.Location = New-Object System.Drawing.Size (20,600)
-	$PlayButton.Size = New-Object System.Drawing.Size (150,80)
-	$PlayButton.text = "Play"
-	$PlayButton.Add_Click({ Update-WinningNumbersAndAmount; AddCounter })
+    $Form = New-Object System.Windows.Forms.Form
+    $Form.Size = New-Object System.Drawing.Size ([int](1000 * $scaleFactorWidth), [int](800 * $scaleFactorHeight))
+    $Form.text = "Lottery Simulator"
 
-	$PlayUntilJackpotButton = New-Object System.Windows.Forms.Button
-	$PlayUntilJackpotButton.Font = New-Object System.Drawing.Font ("Microsoft Sans Serif",10,[System.Drawing.FontStyle]::Bold)
-	$PlayUntilJackpotButton.Location = New-Object System.Drawing.Size (200,600)
-	$PlayUntilJackpotButton.Size = New-Object System.Drawing.Size (300,80)
-	$PlayUntilJackpotButton.text = "Play Until Jackpot or Million"
-	$PlayUntilJackpotButton.Add_Click({ PlayUntilJackpotOrMillion })
+    $RTB = New-Object System.Windows.Forms.RichTextBox
+    $RTB.Font = New-Object System.Drawing.Font ("Microsoft Sans Serif", [int](15 * $scaleFactorFont), [System.Drawing.FontStyle]::Bold)
+    $RTB.Location = New-Object System.Drawing.Size ([int](20 * $scaleFactorWidth), [int](20 * $scaleFactorHeight))
+    $RTB.Size = New-Object System.Drawing.Size ([int](900 * $scaleFactorWidth), [int](500 * $scaleFactorHeight))
+    $RTB.MultiLine = $True
+    $RTB.ScrollBars = "Vertical"
 
-    	$PlayCountLabel = New-Object System.Windows.Forms.Label
-	$PlayCountLabel.Font = New-Object System.Drawing.Font("Microsoft Sans Serif",15,[System.Drawing.FontStyle]::Bold)
-    	$PlayCountLabel.Location = New-Object System.Drawing.Size(450,1050)
-    	$PlayCountLabel.Size = New-Object System.Drawing.Size(300,80)
-    	$PlayCountLabel.Text = "Total Plays: 0"
+    $PlayButton = New-Object System.Windows.Forms.Button
+    $PlayButton.Font = New-Object System.Drawing.Font ("Microsoft Sans Serif", [int](15 * $scaleFactorFont), [System.Drawing.FontStyle]::Bold)
+    $PlayButton.Location = New-Object System.Drawing.Size ([int](20 * $scaleFactorWidth), [int](600 * $scaleFactorHeight))
+    $PlayButton.Size = New-Object System.Drawing.Size ([int](150 * $scaleFactorWidth), [int](80 * $scaleFactorHeight))
+    $PlayButton.text = "Play"
+    $PlayButton.Add_Click({
+        Update-WinningNumbersAndAmount
+        AddCounter
+    })
 
-	$ElapsedTimeLabel = New-Object System.Windows.Forms.Label
-	$ElapsedTimeLabel.Font = New-Object System.Drawing.Font ("Microsoft Sans Serif",15,[System.Drawing.FontStyle]::Bold)
-	$ElapsedTimeLabel.Location = New-Object System.Drawing.Size (20,550)
-	$ElapsedTimeLabel.Size = New-Object System.Drawing.Size (350,80)
-	$ElapsedTimeLabel.text = "Elapsed Time: 00:00:00"
+    $PlayUntilJackpotButton = New-Object System.Windows.Forms.Button
+    $PlayUntilJackpotButton.Font = New-Object System.Drawing.Font ("Microsoft Sans Serif", [int](10 * $scaleFactorFont), [System.Drawing.FontStyle]::Bold)
+    $PlayUntilJackpotButton.Location = New-Object System.Drawing.Size ([int](200 * $scaleFactorWidth), [int](600 * $scaleFactorHeight))
+    $PlayUntilJackpotButton.Size = New-Object System.Drawing.Size ([int](300 * $scaleFactorWidth), [int](80 * $scaleFactorHeight))
+    $PlayUntilJackpotButton.text = "Play Until Jackpot or Million"
+    $PlayUntilJackpotButton.Add_Click({ PlayUntilJackpotOrMillion })
 
-	$simulationTimer = New-Object System.Windows.Forms.Timer
-	# 1 Second Interval
-	#$simulationTimer.Interval = 1000
-	# Half Second Interval
-	#$simulationTimer.Interval = 500
-	# Quarter Second Interval
-	$simulationTimer.Interval = 250
+    $PlayCountLabel = New-Object System.Windows.Forms.Label
+    $PlayCountLabel.Font = New-Object System.Drawing.Font("Microsoft Sans Serif",15,[System.Drawing.FontStyle]::Bold)
+    $PlayCountLabel.Location = New-Object System.Drawing.Size(450,1050)
+    $PlayCountLabel.Size = New-Object System.Drawing.Size(300,80)
+    $PlayCountLabel.Text = "Total Plays: 0"
 
-	$stopWatch = New-Object System.Diagnostics.Stopwatch
+    $ElapsedTimeLabel = New-Object System.Windows.Forms.Label
+    $ElapsedTimeLabel.Font = New-Object System.Drawing.Font ("Microsoft Sans Serif",15,[System.Drawing.FontStyle]::Bold)
+    $ElapsedTimeLabel.Location = New-Object System.Drawing.Size (20,550)
+    $ElapsedTimeLabel.Size = New-Object System.Drawing.Size (350,80)
+    $ElapsedTimeLabel.text = "Elapsed Time: 00:00:00"
 
-	function PlayUntilJackpotOrMillion {
-		$script:stopSimulation = $false
-		$stopWatch.Start()
-		$simulationTimer.Start()
+    $simulationTimer = New-Object System.Windows.Forms.Timer
+    # 1 Second Interval
+    #$simulationTimer.Interval = 1000
+    # Half Second Interval
+    #$simulationTimer.Interval = 500
+    # Quarter Second Interval
+    $simulationTimer.Interval = 250
+
+    $stopWatch = New-Object System.Diagnostics.Stopwatch
+
+    function PlayUntilJackpotOrMillion {
+        $script:stopSimulation = $false
+	$stopWatch.Start()
+	$simulationTimer.Start()
+    }
+    $simulationTimer.Add_Tick({
+	if ($script:stopSimulation) {
+		$simulationTimer.Stop()
+		$stopWatch.Stop()
+	} else {
+	    Update-WinningNumbersAndAmount
+	    AddCounter
+            $ElapsedTimeLabel.text = "Elapsed Time: " + $stopWatch.Elapsed.ToString("hh\:mm\:ss")
+	
+            if ($displayResult -eq "JACKPOT WINNER" -or $displayResult -eq "`$1,000,000 WINNER - 5 White Balls") {
+	        $simulationTimer.Stop()
+		$stopWatch.Stop()
+	    }
 	}
-	$simulationTimer.Add_Tick({
-			if ($script:stopSimulation) {
-				$simulationTimer.Stop()
-				$stopWatch.Stop()
-			} else {
-				Update-WinningNumbersAndAmount
-				AddCounter
-				$ElapsedTimeLabel.text = "Elapsed Time: " + $stopWatch.Elapsed.ToString("hh\:mm\:ss")
+    })
 
-				if ($displayResult -eq "JACKPOT WINNER" -or $displayResult -eq "`$1,000,000 WINNER - 5 White Balls") {
-					$simulationTimer.Stop()
-					$stopWatch.Stop()
-				}
-			}
-		})
+    $StopButton = New-Object System.Windows.Forms.Button
+    $StopButton.Font = New-Object System.Drawing.Font ("Microsoft Sans Serif", [int](15 * $scaleFactorFont), [System.Drawing.FontStyle]::Bold)
+    $StopButton.Location = New-Object System.Drawing.Size ([int](600 * $scaleFactorWidth), [int](600 * $scaleFactorHeight))
+    $StopButton.Size = New-Object System.Drawing.Size ([int](150 * $scaleFactorWidth), [int](80 * $scaleFactorHeight))
+    $StopButton.text = "Stop"
+    $StopButton.Add_Click({ $script:stopSimulation = $true })
 
-	$StopButton = New-Object System.Windows.Forms.Button
-	$StopButton.Font = New-Object System.Drawing.Font ("Microsoft Sans Serif",15,[System.Drawing.FontStyle]::Bold)
-	$StopButton.Location = New-Object System.Drawing.Size (600,600)
-	$StopButton.Size = New-Object System.Drawing.Size (150,80)
-	$StopButton.text = "Stop"
-	$StopButton.Add_Click({ $script:stopSimulation = $true })
+    $CloseButton = New-Object System.Windows.Forms.Button
+    $CloseButton.Font = New-Object System.Drawing.Font ("Microsoft Sans Serif", [int](15 * $scaleFactorFont), [System.Drawing.FontStyle]::Bold)
+    $CloseButton.Location = New-Object System.Drawing.Size ([int](750 * $scaleFactorWidth), [int](600 * $scaleFactorHeight))
+    $CloseButton.Size = New-Object System.Drawing.Size ([int](150 * $scaleFactorWidth), [int](80 * $scaleFactorHeight))
+    $CloseButton.text = "Close"
+    $CloseButton.Add_Click({ $Form.Close() })
 
-	$CloseButton = New-Object System.Windows.Forms.Button
-	$CloseButton.Font = New-Object System.Drawing.Font ("Microsoft Sans Serif",15,[System.Drawing.FontStyle]::Bold)
-	$CloseButton.Location = New-Object System.Drawing.Size (750,600)
-	$CloseButton.Size = New-Object System.Drawing.Size (150,80)
-	$CloseButton.text = "Close"
-	$CloseButton.Add_Click({ $Form.Close() })
-
-	$Form.Controls.AddRange(@($RTB,$Label,$PlayButton,$CloseButton,$PlayUntilJackpotButton,$PlayCountLabel,$ElapsedTimeLabel,$StopButton))
-	Update-WinningNumbersAndAmount
-	AddCounter
-	$Form.ShowDialog()
-	$Form.Add_FormClosing({ $script:stopSimulation = $true })
+    $Form.Controls.AddRange(@($RTB,$Label,$PlayButton,$CloseButton,$PlayUntilJackpotButton,$PlayCountLabel,$ElapsedTimeLabel,$StopButton))
+    Update-WinningNumbersAndAmount
+    AddCounter
+    $Form.ShowDialog()
+    $Form.Add_FormClosing({ $script:stopSimulation = $true })
 }
+
 Show-MainForm
